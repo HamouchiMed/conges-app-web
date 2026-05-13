@@ -26,7 +26,11 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`🚀 CongeApp backend running on http://localhost:${PORT}`);
-});
+// Start server conditionally
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(PORT, () => {
+    console.log(`🚀 CongeApp backend running on http://localhost:${PORT}`);
+  });
+}
+
+module.exports = app;
