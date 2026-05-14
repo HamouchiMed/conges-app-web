@@ -23,7 +23,7 @@ export default function Login() {
   };
 
   const handleDirectorLogin = async () => {
-    if (password === '0000') {
+    if (password === '1835') {
       await login('Admin Directeur', 'director');
       navigate('/director/panel');
     } else {
