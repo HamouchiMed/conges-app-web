@@ -29,8 +29,8 @@ export default function StatusBadge({ available, label, size = 'md' }) {
       </span>
       {label && (
         <span
-          className={`${labelSizes[size]} font-medium ${
-            available ? 'text-emerald-300' : 'text-red-300'
+          className={`${labelSizes[size]} font-semibold ${
+            available ? 'text-emerald-700' : 'text-red-700'
           }`}
         >
           {label}

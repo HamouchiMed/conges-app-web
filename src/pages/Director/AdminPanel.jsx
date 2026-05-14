@@ -14,20 +14,20 @@ const statusConfig = {
   pending: {
     label: 'En attente',
     icon: Hourglass,
-    color: 'text-amber-400',
-    bg: 'bg-amber-400/10 border-amber-400/20',
+    color: 'text-amber-700',
+    bg: 'bg-amber-50 border-amber-200',
   },
   approved: {
     label: 'Approuvé',
     icon: CheckCircle2,
-    color: 'text-emerald-400',
-    bg: 'bg-emerald-400/10 border-emerald-400/20',
+    color: 'text-emerald-700',
+    bg: 'bg-emerald-50 border-emerald-200',
   },
   rejected: {
     label: 'Refusé',
     icon: XCircle,
-    color: 'text-red-400',
-    bg: 'bg-red-400/10 border-red-400/20',
+    color: 'text-red-700',
+    bg: 'bg-red-50 border-red-200',
   },
 };
 
@@ -50,12 +50,12 @@ export default function AdminPanel() {
   return (
     <div className="page-container">
       <h2 className="section-title flex items-center gap-2">
-        <Users size={22} />
+        <Users size={22} className="text-primary-600" />
         Demandes de Congés
       </h2>
 
       {/* Filter tabs */}
-      <div className="flex gap-2 mb-5 overflow-x-auto scrollbar-hide pb-1">
+      <div className="flex gap-2 mb-6 overflow-x-auto scrollbar-hide pb-1">
         {[
           { key: 'all', label: 'Tout' },
           { key: 'pending', label: 'En attente' },
@@ -65,16 +65,16 @@ export default function AdminPanel() {
           <button
             key={tab.key}
             onClick={() => setFilter(tab.key)}
-            className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-medium whitespace-nowrap transition-all duration-200 cursor-pointer ${
+            className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all duration-200 cursor-pointer ${
               filter === tab.key
-                ? 'bg-primary-500/20 text-primary-300 border border-primary-400/30'
-                : 'glass-card-light text-slate-400 hover:text-slate-200'
+                ? 'bg-primary-600 text-white shadow-md'
+                : 'bg-white border border-slate-200 text-slate-600 hover:border-slate-300 shadow-sm'
             }`}
           >
             <Filter size={12} />
             {tab.label}
             <span className={`ml-1 px-1.5 py-0.5 rounded-md text-[10px] font-bold ${
-              filter === tab.key ? 'bg-primary-500/30' : 'bg-surface-700'
+              filter === tab.key ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-500'
             }`}>
               {counts[tab.key]}
             </span>
@@ -84,12 +84,12 @@ export default function AdminPanel() {
 
       {/* Requests list */}
       {filtered.length === 0 ? (
-        <div className="glass-card p-8 text-center animate-fade-in">
-          <Users size={40} className="mx-auto text-slate-500 mb-3" />
-          <p className="text-slate-400 text-sm">Aucune demande trouvée</p>
+        <div className="glass-card p-10 text-center animate-fade-in border-dashed border-2">
+          <Users size={40} className="mx-auto text-slate-300 mb-4" />
+          <p className="text-slate-500 font-medium">Aucune demande trouvée</p>
         </div>
       ) : (
-        <div className="space-y-3">
+        <div className="space-y-4">
           {filtered.map((leave) => {
             const cfg = statusConfig[leave.status];
             const StatusIcon = cfg.icon;
@@ -100,23 +100,23 @@ export default function AdminPanel() {
             return (
               <div
                 key={leave.id}
-                className="glass-card p-4 animate-slide-up"
+                className="glass-card p-5 animate-slide-up border border-slate-100 shadow-sm hover:shadow-md transition-shadow"
               >
                 {/* Header */}
-                <div className="flex items-start justify-between mb-3">
+                <div className="flex items-start justify-between mb-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-400 to-violet-500 flex items-center justify-center text-white font-bold text-sm">
+                    <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center text-white font-bold text-sm shadow-sm">
                       {leave.employeeName.charAt(0)}
                     </div>
                     <div>
-                      <p className="text-sm font-semibold text-white">
+                      <p className="text-sm font-bold text-slate-900">
                         {leave.employeeName}
                       </p>
-                      <p className="text-[11px] text-slate-400">{typeLabel}</p>
+                      <p className="text-[11px] font-bold text-primary-700 uppercase tracking-tight">{typeLabel}</p>
                     </div>
                   </div>
                   <span
-                    className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium border ${cfg.bg} ${cfg.color}`}
+                    className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider border shadow-sm ${cfg.bg} ${cfg.color}`}
                   >
                     <StatusIcon size={12} />
                     {cfg.label}
@@ -124,21 +124,25 @@ export default function AdminPanel() {
                 </div>
 
                 {/* Dates */}
-                <div className="flex items-center gap-2 text-xs text-slate-300 mb-2">
-                  <span className="bg-surface-800/50 px-2.5 py-1 rounded-lg">
+                <div className="flex items-center gap-2 text-xs text-slate-900 mb-4">
+                  <span className="bg-white border border-slate-200 px-3.5 py-2 rounded-xl font-bold shadow-sm">
                     📅 {formatDate(leave.startDate)}
                   </span>
-                  <span className="text-slate-500">→</span>
-                  <span className="bg-surface-800/50 px-2.5 py-1 rounded-lg">
+                  <span className="text-slate-400 font-bold">→</span>
+                  <span className="bg-white border border-slate-200 px-3.5 py-2 rounded-xl font-bold shadow-sm">
                     📅 {formatDate(leave.endDate)}
                   </span>
                 </div>
 
                 {/* Motif */}
                 {leave.motif && (
-                  <p className="text-xs text-slate-400 bg-surface-800/50 rounded-lg px-3 py-2 mb-3">
-                    💬 {leave.motif}
-                  </p>
+                  <div className="relative group">
+                    <div className="absolute inset-0 bg-accent-gold/5 rounded-xl blur-sm group-hover:blur-md transition-all"></div>
+                    <p className="relative text-[13px] text-slate-700 bg-white/80 backdrop-blur-sm border border-slate-200/60 rounded-xl px-4 py-3.5 mb-4 leading-relaxed font-medium">
+                      <span className="text-primary-600 mr-1.5 font-bold">💬</span>
+                      {leave.motif}
+                    </p>
+                  </div>
                 )}
 
                 {/* Actions for pending */}

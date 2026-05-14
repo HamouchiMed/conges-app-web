@@ -62,17 +62,17 @@ export default function Meetings() {
 
   return (
     <div className="page-container">
-      <div className="flex items-center justify-between mb-5">
+      <div className="flex items-center justify-between mb-6">
         <h2 className="section-title mb-0 flex items-center gap-2">
-          <CalendarDays size={22} />
+          <CalendarDays size={22} className="text-primary-600" />
           Réunions
         </h2>
         <button
           onClick={() => setShowForm(!showForm)}
-          className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all duration-200 cursor-pointer ${
+          className={`px-4 py-2 rounded-xl text-xs font-bold transition-all duration-200 cursor-pointer shadow-sm ${
             showForm
-              ? 'bg-red-500/20 text-red-300 border border-red-400/30'
-              : 'bg-primary-500/20 text-primary-300 border border-primary-400/30'
+              ? 'bg-red-50 text-red-600 border border-red-200'
+              : 'bg-primary-50 text-primary-600 border border-primary-200'
           }`}
         >
           {showForm ? '✕ Fermer' : '+ Nouvelle'}
@@ -83,9 +83,9 @@ export default function Meetings() {
       {showForm && !submitted && (
         <form
           onSubmit={handleSubmit}
-          className="glass-card p-5 mb-6 animate-slide-up"
+          className="glass-card p-6 mb-8 animate-slide-up border border-slate-100 shadow-lg"
         >
-          <h3 className="text-sm font-semibold text-white mb-4">
+          <h3 className="text-sm font-bold text-slate-900 mb-5">
             Planifier une réunion
           </h3>
 
@@ -115,16 +115,16 @@ export default function Meetings() {
           />
 
           {/* Employee selection with availability */}
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-slate-300 mb-2">
-              Sélectionner les participants
+          <div className="mb-6">
+            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-3">
+              Participants
             </label>
             {form.date && (
-              <p className="text-[11px] text-slate-500 mb-2">
+              <p className="text-[11px] text-primary-600 font-medium mb-3">
                 📅 Disponibilité pour le {formatDate(form.date)}
               </p>
             )}
-            <div className="space-y-2 max-h-[240px] overflow-y-auto scrollbar-hide">
+            <div className="space-y-2 max-h-[240px] overflow-y-auto scrollbar-hide pr-1">
               {employees.map((name) => {
                 const available = getAvailabilityForDate(name, form.date);
                 const isSelected = form.attendees.includes(name);
@@ -134,26 +134,26 @@ export default function Meetings() {
                     key={name}
                     type="button"
                     onClick={() => toggleAttendee(name)}
-                    className={`w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all duration-200 text-sm cursor-pointer ${
+                    className={`w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all duration-200 text-sm cursor-pointer border ${
                       isSelected
-                        ? 'bg-primary-500/15 border border-primary-400/30'
-                        : 'glass-card-light'
+                        ? 'bg-primary-50 border-primary-300'
+                        : 'bg-white border-slate-100 hover:border-slate-200'
                     }`}
                   >
                     <div className="flex items-center gap-3">
                       <div
-                        className={`w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold text-xs ${
+                        className={`w-9 h-9 rounded-xl flex items-center justify-center text-white font-bold text-xs shadow-sm ${
                           available
-                            ? 'bg-gradient-to-br from-emerald-500 to-teal-400'
-                            : 'bg-gradient-to-br from-red-500 to-orange-400'
+                            ? 'bg-gradient-to-br from-emerald-500 to-emerald-600'
+                            : 'bg-gradient-to-br from-red-500 to-red-600'
                         }`}
                       >
                         {name.charAt(0)}
                       </div>
                       <div className="text-left">
                         <p
-                          className={`font-medium ${
-                            available ? 'text-white' : 'text-slate-400'
+                          className={`font-bold ${
+                            available ? 'text-slate-900' : 'text-slate-400'
                           }`}
                         >
                           {name}
@@ -167,17 +167,17 @@ export default function Meetings() {
                     </div>
                     <div className="flex items-center gap-2">
                       {!available && (
-                        <UserX size={14} className="text-red-400" />
+                        <UserX size={14} className="text-red-500" />
                       )}
                       <span
                         className={`w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all ${
                           isSelected
-                            ? 'bg-primary-500 border-primary-400'
-                            : 'border-slate-600'
+                            ? 'bg-primary-600 border-primary-600'
+                            : 'border-slate-300'
                         }`}
                       >
                         {isSelected && (
-                          <span className="text-white text-xs">✓</span>
+                          <span className="text-white text-[10px] font-bold">✓</span>
                         )}
                       </span>
                     </div>
@@ -186,7 +186,7 @@ export default function Meetings() {
               })}
             </div>
             {form.attendees.length > 0 && (
-              <p className="text-xs text-primary-300 mt-2">
+              <p className="text-xs font-bold text-primary-600 mt-3 text-right">
                 {form.attendees.length} participant(s) sélectionné(s)
               </p>
             )}
@@ -200,7 +200,7 @@ export default function Meetings() {
               !form.time ||
               form.attendees.length === 0
             }
-            className={`w-full gradient-btn flex items-center justify-center gap-2 ${
+            className={`w-full gradient-btn shadow-md flex items-center justify-center gap-2 ${
               !form.title || !form.date || !form.time || form.attendees.length === 0
                 ? 'opacity-40 cursor-not-allowed'
                 : ''
@@ -214,69 +214,65 @@ export default function Meetings() {
 
       {/* Success message */}
       {submitted && (
-        <div className="glass-card p-8 text-center mb-6 animate-slide-up">
-          <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-emerald-500/20 flex items-center justify-center">
-            <CheckCircle size={32} className="text-emerald-400" />
+        <div className="glass-card p-10 text-center mb-8 animate-slide-up border-emerald-100 bg-emerald-50/30 shadow-md">
+          <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-emerald-100 flex items-center justify-center shadow-inner">
+            <CheckCircle size={32} className="text-emerald-600" />
           </div>
-          <p className="text-white font-semibold">Réunion créée !</p>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-emerald-900 font-bold text-lg">Réunion créée !</p>
+          <p className="text-sm text-emerald-700 mt-1">
             Les participants ont été notifiés
           </p>
         </div>
       )}
 
       {/* Existing meetings */}
-      <h3 className="text-sm font-semibold text-slate-300 mb-3 flex items-center gap-2">
+      <h3 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4 flex items-center gap-2">
         <Clock size={16} />
         Réunions planifiées
       </h3>
 
       {meetings.length === 0 ? (
-        <div className="glass-card p-8 text-center animate-fade-in">
-          <CalendarDays size={40} className="mx-auto text-slate-500 mb-3" />
-          <p className="text-slate-400 text-sm">Aucune réunion planifiée</p>
+        <div className="glass-card p-12 text-center animate-fade-in border-dashed border-2">
+          <CalendarDays size={40} className="mx-auto text-slate-300 mb-4" />
+          <p className="text-slate-500 font-medium">Aucune réunion planifiée</p>
         </div>
       ) : (
-        <div className="space-y-3">
+        <div className="space-y-4">
           {meetings.map((meeting) => (
-            <div key={meeting.id} className="glass-card p-4 animate-slide-up">
-              <div className="flex items-start justify-between mb-3">
+            <div key={meeting.id} className="glass-card p-5 animate-slide-up border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+              <div className="flex items-start justify-between mb-4 pb-4 border-b border-slate-50">
                 <div>
-                  <p className="text-sm font-semibold text-white">
+                  <p className="text-base font-bold text-slate-900">
                     {meeting.title}
                   </p>
-                  <div className="flex items-center gap-2 mt-1">
-                    <span className="text-xs text-slate-400">
+                  <div className="flex items-center gap-3 mt-1.5">
+                    <span className="text-xs font-semibold text-slate-600 bg-slate-100 px-2 py-1 rounded-md">
                       📅 {formatDate(meeting.date)}
                     </span>
-                    <span className="text-xs text-slate-400">
+                    <span className="text-xs font-semibold text-slate-600 bg-slate-100 px-2 py-1 rounded-md">
                       🕐 {meeting.time}
                     </span>
                   </div>
                 </div>
-                <span className="px-2.5 py-1 rounded-lg bg-primary-500/15 border border-primary-400/20 text-primary-300 text-xs font-medium">
+                <span className="px-3 py-1.5 rounded-lg bg-primary-50 border border-primary-100 text-primary-700 text-[10px] font-bold uppercase tracking-wider">
                   {meeting.attendees.length} invités
                 </span>
               </div>
 
               {/* Attendees with availability */}
-              <div className="space-y-1.5">
+              <div className="space-y-2">
                 {meeting.attendees.map((name) => {
                   const available = getAvailabilityForDate(name, meeting.date);
                   return (
                     <div
                       key={name}
-                      className="flex items-center justify-between px-3 py-2 rounded-lg bg-surface-800/40"
+                      className="flex items-center justify-between px-4 py-2.5 rounded-xl bg-slate-50/50 border border-slate-100/50"
                     >
-                      <div className="flex items-center gap-2">
-                        {available ? (
-                          <UserCheck size={14} className="text-emerald-400" />
-                        ) : (
-                          <UserX size={14} className="text-red-400" />
-                        )}
+                      <div className="flex items-center gap-3">
+                        <div className={`w-2 h-2 rounded-full ${available ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.4)]' : 'bg-red-500'}`} />
                         <span
-                          className={`text-xs font-medium ${
-                            available ? 'text-slate-200' : 'text-slate-400 line-through'
+                          className={`text-xs font-bold ${
+                            available ? 'text-slate-800' : 'text-slate-400 line-through'
                           }`}
                         >
                           {name}

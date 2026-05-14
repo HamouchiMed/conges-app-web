@@ -15,20 +15,20 @@ const statusConfig = {
   pending: {
     label: 'En attente',
     icon: Hourglass,
-    color: 'text-amber-400',
-    bg: 'bg-amber-400/10 border-amber-400/20',
+    color: 'text-amber-700',
+    bg: 'bg-amber-50 border-amber-200',
   },
   approved: {
     label: 'Approuvé',
     icon: CheckCircle2,
-    color: 'text-emerald-400',
-    bg: 'bg-emerald-400/10 border-emerald-400/20',
+    color: 'text-emerald-700',
+    bg: 'bg-emerald-50 border-emerald-200',
   },
   rejected: {
     label: 'Refusé',
     icon: XCircle,
-    color: 'text-red-400',
-    bg: 'bg-red-400/10 border-red-400/20',
+    color: 'text-red-700',
+    bg: 'bg-red-50 border-red-200',
   },
 };
 
@@ -56,31 +56,31 @@ export default function Dashboard() {
   return (
     <div className="page-container">
       {/* Welcome */}
-      <div className="mb-6">
-        <h2 className="text-xl font-bold text-white">
+      <div className="mb-8">
+        <h2 className="text-2xl font-extrabold text-slate-900 tracking-tight">
           Bonjour, {user?.name?.split(' ')[0]} 👋
         </h2>
-        <div className="flex items-center gap-2 mt-1.5">
+        <div className="flex items-center gap-2 mt-2">
           <StatusBadge
             available={!hasActiveLeave}
-            label={hasActiveLeave ? 'En congé' : 'Disponible'}
+            label={hasActiveLeave ? 'En congé' : 'Disponible pour le travail'}
             size="sm"
           />
         </div>
       </div>
 
       {/* Stats cards */}
-      <div className="grid grid-cols-3 gap-3 mb-6">
+      <div className="grid grid-cols-3 gap-3 mb-8">
         {[
-          { label: 'Total', value: stats.total, gradient: 'from-primary-500 to-violet-500' },
-          { label: 'Approuvés', value: stats.approved, gradient: 'from-emerald-500 to-teal-400' },
-          { label: 'En attente', value: stats.pending, gradient: 'from-amber-500 to-orange-400' },
+          { label: 'Total', value: stats.total, color: 'text-primary-600' },
+          { label: 'Approuvés', value: stats.approved, color: 'text-emerald-600' },
+          { label: 'Attente', value: stats.pending, color: 'text-amber-600' },
         ].map((stat) => (
-          <div key={stat.label} className="glass-card p-4 text-center">
-            <p className={`text-2xl font-extrabold bg-gradient-to-r ${stat.gradient} bg-clip-text text-transparent`}>
+          <div key={stat.label} className="glass-card p-4 text-center border-slate-100 shadow-sm">
+            <p className={`text-2xl font-black ${stat.color}`}>
               {stat.value}
             </p>
-            <p className="text-[11px] text-slate-400 mt-1 font-medium">
+            <p className="text-[10px] text-slate-500 mt-1 font-bold uppercase tracking-wider">
               {stat.label}
             </p>
           </div>
@@ -90,7 +90,7 @@ export default function Dashboard() {
       {/* Quick action */}
       <button
         onClick={() => navigate('/employee/leave')}
-        className="w-full gradient-btn flex items-center justify-center gap-2 mb-8"
+        className="w-full gradient-btn flex items-center justify-center gap-2 mb-10 shadow-lg"
       >
         <PlusCircle size={18} />
         Nouvelle demande de congé
@@ -98,20 +98,20 @@ export default function Dashboard() {
 
       {/* History */}
       <h3 className="section-title flex items-center gap-2">
-        <Clock size={20} />
-        Historique
+        <Clock size={22} className="text-primary-600" />
+        Mon Historique
       </h3>
 
       {myLeaves.length === 0 ? (
-        <div className="glass-card p-8 text-center">
-          <CalendarDays size={40} className="mx-auto text-slate-500 mb-3" />
-          <p className="text-slate-400 text-sm">Aucune demande de congé</p>
-          <p className="text-slate-500 text-xs mt-1">
+        <div className="glass-card p-12 text-center border-dashed border-2">
+          <CalendarDays size={40} className="mx-auto text-slate-200 mb-4" />
+          <p className="text-slate-500 font-medium text-sm">Aucune demande de congé</p>
+          <p className="text-slate-400 text-xs mt-1">
             Vos demandes apparaîtront ici
           </p>
         </div>
       ) : (
-        <div className="space-y-3">
+        <div className="space-y-4">
           {myLeaves.map((leave) => {
             const cfg = statusConfig[leave.status];
             const StatusIcon = cfg.icon;
@@ -122,28 +122,34 @@ export default function Dashboard() {
             return (
               <div
                 key={leave.id}
-                className="glass-card p-4 animate-slide-up"
+                className="glass-card p-5 animate-slide-up border border-slate-100 shadow-sm hover:shadow-md transition-shadow"
               >
-                <div className="flex items-start justify-between mb-2">
+                <div className="flex items-start justify-between mb-4">
                   <div>
-                    <p className="text-sm font-semibold text-white">
+                    <p className="text-[11px] font-bold text-primary-700 uppercase tracking-tight mb-1">
                       {typeLabel}
                     </p>
-                    <p className="text-xs text-slate-400 mt-0.5">
-                      {formatDate(leave.startDate)} → {formatDate(leave.endDate)}
-                    </p>
+                    <div className="flex items-center gap-2 text-xs font-bold text-slate-800 bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-100 shadow-sm">
+                      <span>📅 {formatDate(leave.startDate)}</span>
+                      <span className="text-slate-300">→</span>
+                      <span>📅 {formatDate(leave.endDate)}</span>
+                    </div>
                   </div>
                   <span
-                    className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium border ${cfg.bg} ${cfg.color}`}
+                    className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider border shadow-sm ${cfg.bg} ${cfg.color}`}
                   >
                     <StatusIcon size={12} />
                     {cfg.label}
                   </span>
                 </div>
                 {leave.motif && (
-                  <p className="text-xs text-slate-400 mt-2 bg-surface-800/50 rounded-lg px-3 py-2">
-                    💬 {leave.motif}
-                  </p>
+                  <div className="relative group mt-3">
+                    <div className="absolute inset-0 bg-accent-gold/5 rounded-xl blur-sm"></div>
+                    <p className="relative text-[12px] text-slate-700 bg-white/60 backdrop-blur-sm border border-slate-100 rounded-xl px-4 py-3 leading-relaxed font-medium">
+                      <span className="text-primary-600 mr-1.5 font-bold">💬</span>
+                      {leave.motif}
+                    </p>
+                  </div>
                 )}
               </div>
             );
